@@ -2,6 +2,7 @@ package br.com.alura.leilao.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Leilao implements Serializable {
@@ -29,6 +30,10 @@ public class Leilao implements Serializable {
     }
 
     public void propoe(Lance lance) {
+        lances.add(lance);
+
+        Collections.sort(lances);
+
         double valorLance = lance.getValor();
 
         calculaMaiorLance(valorLance);
@@ -46,5 +51,9 @@ public class Leilao implements Serializable {
         if (valorLance > maiorLance) {
             maiorLance = valorLance;
         }
+    }
+
+    public List<Lance> tresMaioresLances() {
+        return lances.subList(0, 3);
     }
 }
