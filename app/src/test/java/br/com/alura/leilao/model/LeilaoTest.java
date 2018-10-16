@@ -29,7 +29,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void deve_DevolveMaiorLance_QuandoRecebeApenasUmLance(){
+    public void deve_DevolveMaiorLance_QuandoRecebeApenasUmLance() {
 
         CONSOLE.propoe(new Lance(ALEX, 200.0));
 
@@ -39,7 +39,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void deve_DevolveMaiorLance_QuandoRecebeMaisDeUmLanceEmOrdemCrescente(){
+    public void deve_DevolveMaiorLance_QuandoRecebeMaisDeUmLanceEmOrdemCrescente() {
 
         CONSOLE.propoe(new Lance(ALEX, 100.0));
         CONSOLE.propoe(new Lance(new Usuario("Fran"), 200.0));
@@ -50,7 +50,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void deve_DevolveMenorLance_QuandoRecebeApenasUmLance(){
+    public void deve_DevolveMenorLance_QuandoRecebeApenasUmLance() {
 
         CONSOLE.propoe(new Lance(ALEX, 200.0));
 
@@ -60,7 +60,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void deve_DevolveMenorLance_QuandoRecebeMaisDeUmLanceEmOrdemCrescente(){
+    public void deve_DevolveMenorLance_QuandoRecebeMaisDeUmLanceEmOrdemCrescente() {
 
         CONSOLE.propoe(new Lance(ALEX, 100.0));
         CONSOLE.propoe(new Lance(new Usuario("Fran"), 200.0));
@@ -71,7 +71,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void deve_DevolverTresMaioresLances_QuandoRecebeExatosTresLances(){
+    public void deve_DevolverTresMaioresLances_QuandoRecebeExatosTresLances() {
 
         CONSOLE.propoe(new Lance(ALEX, 200.0));
         CONSOLE.propoe(new Lance(new Usuario("Fran"), 300.0));
@@ -86,14 +86,14 @@ public class LeilaoTest {
     }
 
     @Test
-    public void deve_DevolverTresMaioresLances_QuandoNaoRecebeLances(){
+    public void deve_DevolverTresMaioresLances_QuandoNaoRecebeLances() {
         List<Lance> tresMaioresLancesDevolvidos = CONSOLE.tresMaioresLances();
 
         assertEquals(0, tresMaioresLancesDevolvidos.size());
     }
 
     @Test
-    public void deve_DevolverTresMaioresLances_QuandoRecebeApenasUmLance(){
+    public void deve_DevolverTresMaioresLances_QuandoRecebeApenasUmLance() {
         CONSOLE.propoe(new Lance(ALEX, 200.0));
 
         List<Lance> tresMaioresLances = CONSOLE.tresMaioresLances();
@@ -104,7 +104,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void deve_DevolverTresMaioresLances_QuandoRecebeApenasDoisLances(){
+    public void deve_DevolverTresMaioresLances_QuandoRecebeApenasDoisLances() {
         CONSOLE.propoe(new Lance(ALEX, 300.0));
         CONSOLE.propoe(new Lance(new Usuario("Fran"), 400.0));
 
@@ -118,7 +118,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void deve_DevolverTresMaioresLances_QuandoRecebeMaisDeTresLances(){
+    public void deve_DevolverTresMaioresLances_QuandoRecebeMaisDeTresLances() {
 
         final Usuario FRAN = new Usuario("Fran");
 
@@ -151,7 +151,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void deve_DevolverValorZeroParaMaiorLance_QuandoNaoTiverLances(){
+    public void deve_DevolverValorZeroParaMaiorLance_QuandoNaoTiverLances() {
 
         final double maiorLanceDevolvido = CONSOLE.getMaiorLance();
 
@@ -159,7 +159,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void deve_DevolverValorZeroParaMenosLance_QuandoNaoTiverLance(){
+    public void deve_DevolverValorZeroParaMenosLance_QuandoNaoTiverLance() {
 
         double menorLanceDevolvido = CONSOLE.getMenorLance();
 
@@ -167,46 +167,49 @@ public class LeilaoTest {
     }
 
     @Test
-    public void naoDeve_AdicionarLance_QuandoForMenorQueOMaiorLance(){
+    public void naoDeve_AdicionarLance_QuandoForMenorQueOMaiorLance() {
         CONSOLE.propoe(new Lance(ALEX, 500.0));
-        CONSOLE.propoe(new Lance(new Usuario("Fran"), 400.0));
 
-        int quantidadeLancesDevolvida = CONSOLE.quantidadeDeLances();
-
-        assertEquals(1, quantidadeLancesDevolvida);
+        try {
+            CONSOLE.propoe(new Lance(new Usuario("Fran"), 400.0));
+            fail("Era esperado uma RuntimeException");
+        } catch (RuntimeException exception) {
+            assertEquals("Lance foi menor que maior lance", exception.getMessage());
+        }
     }
 
     @Test
-    public void naoDeve_AdicionarLance_QuandoForOMesmoUsuarioDoUltimoLance(){
+    public void naoDeve_AdicionarLance_QuandoForOMesmoUsuarioDoUltimoLance() {
         CONSOLE.propoe(new Lance(ALEX, 500.0));
-        CONSOLE.propoe(new Lance(ALEX, 600.0));
 
-        int quantidadeLancesDevolvida = CONSOLE.quantidadeDeLances();
-
-        assertEquals(1, quantidadeLancesDevolvida);
+        try {
+            CONSOLE.propoe(new Lance(ALEX, 600.0));
+            fail("Era esperado uma RuntimeException");
+        } catch (RuntimeException exception) {
+            assertEquals("Mesmo usuario do ultimo lance", exception.getMessage());
+        }
     }
 
     @Test
-    public void naoDeve_AdicionarLance_QuandoUsuarioDerCincoLances(){
+    public void naoDeve_AdicionarLance_QuandoUsuarioDerCincoLances() {
         final Usuario FRAN = new Usuario("Fran");
 
-        final Leilao console = new LeilaoBuilder("Console")
-                .lance(ALEX, 100.0)
-                .lance(FRAN, 200.0)
-                .lance(ALEX, 300.0)
-                .lance(FRAN, 400.0)
-                .lance(ALEX, 500.0)
-                .lance(FRAN, 600.0)
-                .lance(ALEX, 700.0)
-                .lance(FRAN, 800.0)
-                .lance(ALEX, 900.0)
-                .lance(FRAN, 1000.0)
-                .lance(ALEX, 1100.0)
-                .lance(FRAN, 1200.0)
-                .build();
+        CONSOLE.propoe(new Lance(ALEX, 100.0));
+        CONSOLE.propoe(new Lance(FRAN, 200.0));
+        CONSOLE.propoe(new Lance(ALEX, 300.0));
+        CONSOLE.propoe(new Lance(FRAN, 400.0));
+        CONSOLE.propoe(new Lance(ALEX, 500.0));
+        CONSOLE.propoe(new Lance(FRAN, 600.0));
+        CONSOLE.propoe(new Lance(ALEX, 700.0));
+        CONSOLE.propoe(new Lance(FRAN, 800.0));
+        CONSOLE.propoe(new Lance(ALEX, 900.0));
+        CONSOLE.propoe(new Lance(FRAN, 1000.0));
 
-        int quantidadeLancesDevolvida = console.quantidadeDeLances();
-
-        assertEquals(10, quantidadeLancesDevolvida);
+        try {
+            CONSOLE.propoe(new Lance(ALEX, 1100.0));
+            fail("Era esperado uma RuntimeException");
+        } catch (RuntimeException e) {
+            assertEquals("Usuario ja deu cinco lances", e.getMessage());
+        }
     }
 }
