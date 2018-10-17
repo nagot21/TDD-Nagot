@@ -1,5 +1,6 @@
 package br.com.alura.leilao.model;
 
+import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Test;
 
 import java.util.List;
@@ -8,6 +9,13 @@ import br.com.alura.leilao.exception.LanceMenorQueUltimoLanceException;
 import br.com.alura.leilao.exception.LanceSequidoDoMesmoUsuarioException;
 import br.com.alura.leilao.exception.UsuarioJaDeuCincoLancesExceptions;
 
+import static org.hamcrest.CoreMatchers.both;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.*;
 
 /**
@@ -26,7 +34,8 @@ public class LeilaoTest {
         String descricaoDevolvida = CONSOLE.getDescricao();
 
         // testar resultado esperado
-        assertEquals("Console", descricaoDevolvida);
+//        assertEquals("Console", descricaoDevolvida);
+        assertThat(descricaoDevolvida, is(equalTo("Console")));
     }
 
     @Test
@@ -36,7 +45,8 @@ public class LeilaoTest {
 
         double maiorLanceDevolvido = CONSOLE.getMaiorLance();
 
-        assertEquals(200.0, maiorLanceDevolvido, DELTA);
+        //assertEquals(200.0, maiorLanceDevolvido, DELTA);
+        assertThat(maiorLanceDevolvido, closeTo(200.0, DELTA));
     }
 
     @Test
@@ -80,10 +90,25 @@ public class LeilaoTest {
 
         List<Lance> tresMaioresLancesDevolvidos = CONSOLE.tresMaioresLances();
 
-        assertEquals(3, tresMaioresLancesDevolvidos.size());
-        assertEquals(400.0, tresMaioresLancesDevolvidos.get(0).getValor(), DELTA);
+//        assertEquals(3, tresMaioresLancesDevolvidos.size());
+//        assertThat(tresMaioresLancesDevolvidos, hasSize(equalTo(3)));
+
+        /*//assertEquals(400.0, tresMaioresLancesDevolvidos.get(0).getValor(), DELTA);
+        assertThat(tresMaioresLancesDevolvidos, hasItem(new Lance(ALEX, 400.0)));
+
         assertEquals(300.0, tresMaioresLancesDevolvidos.get(1).getValor(), DELTA);
-        assertEquals(200.0, tresMaioresLancesDevolvidos.get(2).getValor(), DELTA);
+        assertEquals(200.0, tresMaioresLancesDevolvidos.get(2).getValor(), DELTA);*/
+
+        /*assertThat(tresMaioresLancesDevolvidos, contains(
+                new Lance(ALEX, 400.0),
+                new Lance(new Usuario("Fran"), 300.0),
+                new Lance(ALEX, 200.0)));*/
+
+        assertThat(tresMaioresLancesDevolvidos, both(IsCollectionWithSize.<Lance>hasSize(3))
+                .and(contains(
+                        new Lance(ALEX, 400.0),
+                        new Lance(new Usuario("Fran"), 300.0),
+                        new Lance(ALEX, 200.0))));
     }
 
     @Test
